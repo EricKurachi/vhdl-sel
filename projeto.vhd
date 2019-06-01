@@ -20,7 +20,6 @@ PROCEDURE ffd (
 	SIGNAL clkffd	:	IN  STD_LOGIC;
 	SIGNAL q	:	OUT STD_LOGIC) IS
 	BEGIN
-		IF (clkffd'EVENT AND clkffd = '1') THEN
-			q <= d;
-		END IF;
+		WAIT UNTIL clkffd'EVENT AND clkffd = '1';
+		q <= d;
 	END ffd;
