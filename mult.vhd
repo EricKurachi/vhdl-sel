@@ -12,3 +12,15 @@ begin
     sum   <= p xor q xor c;
     carry <= (p and q) or (p and c) or (q and c);
 end behavior;
+
+------------------------------------------------------
+--FliFlop tipo D
+PROCEDURE ffd (
+	SIGNAL d	:	IN  STD_LOGIC;
+	SIGNAL clkffd	:	IN  STD_LOGIC;
+	SIGNAL q	:	OUT STD_LOGIC) IS
+	BEGIN
+		IF (clkffd'EVENT AND clkffd = '1') THEN
+			q <= d;
+		END IF;
+	END ffd;
