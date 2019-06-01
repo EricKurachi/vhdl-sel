@@ -11,3 +11,16 @@ entity logisticmap is
 end logisticmap;
 
 architecture 
+	
+
+------------------------------------------------------
+--FliFlop tipo D
+PROCEDURE ffd (
+	SIGNAL d	:	IN  STD_LOGIC;
+	SIGNAL clkffd	:	IN  STD_LOGIC;
+	SIGNAL q	:	OUT STD_LOGIC) IS
+	BEGIN
+		IF (clkffd'EVENT AND clkffd = '1') THEN
+			q <= d;
+		END IF;
+	END ffd;
