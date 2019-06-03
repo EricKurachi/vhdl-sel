@@ -19,7 +19,6 @@ PROCEDURE ffd (
 	SIGNAL d	:	IN  STD_LOGIC;
 	SIGNAL clkffd	:	IN  STD_LOGIC;
 	SIGNAL q	:	OUT STD_LOGIC) IS
-	PROCESS
 	BEGIN
 		WAIT UNTIL clkffd'EVENT AND clkffd = '1';
 		q <= d;
