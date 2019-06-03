@@ -1,0 +1,21 @@
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.NUMERIC_STD.ALL;
+
+ENTITY Deslocador IS generic(N: natural := 4);
+ PORT(entrada	: IN  STD_LOGIC_VECTOR(0 TO N-1);
+		saida		: OUT STD_LOGIC_VECTOR(0 TO N+1));
+END ENTITY;
+
+ARCHITECTURE comportamento OF Deslocador IS
+
+FUNCTION desloca(ent : STD_LOGIC_VECTOR(0 TO N-1)) RETURN STD_LOGIC_VECTOR IS
+VARIABLE aux : STD_LOGIC_VECTOR(0 TO N+1);
+BEGIN
+  aux(0 TO N+1):="00"&ent;
+	RETURN STD_LOGIC_VECTOR(aux);
+END;
+
+BEGIN
+saida <= desloca(entrada);
+END ARCHITECTURE;
