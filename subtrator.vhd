@@ -9,8 +9,8 @@ END FullSubtractor;
 
 ARCHITECTURE behavior1 OF FullSubtractor IS
 BEGIN  
-    subtraction <= p xor q;
-    borrow <= (p and q) or (p and b) or (q and b);
+    subtraction <= (p xor q) xor b;
+    borrow <= (not p and q) or (not p and b) or (q and b);
 END behavior1;
 
 LIBRARY IEEE;
@@ -30,11 +30,15 @@ COMPONENT FullSubtractor
          borrow  			: OUT STD_LOGIC);
 END COMPONENT;
 	
-SIGNAL aux	:	STD_LOGIC_VECTOR(0 TO N);
+SIGNAL aux	:	STD_LOGIC_VECTOR(1 TO N);
 BEGIN
-	aux(0) <= '1';
+	ans(0) <= a(0) xor b(0);
+	aux(1) <= not a(0) and b(0);
 	SUB:
-		FOR i IN 0 TO N-1 GENERATE
-			SUBX: FullSubtractor PORT MAP((not a(i)),b(i),aux(i),ans(i),aux(i+1));
+		FOR i IN 1 TO N-1 GENERATE
+			SUBX: FullSubtractor PORT MAP(a(i),b(i),aux(i),ans(i),aux(i+1));
 		END GENERATE SUB;
 END behavior2;
+
+
+
