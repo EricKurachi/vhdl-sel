@@ -2,14 +2,15 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.std_logic_unsigned.all;
 
-entity Mux is
-    port(a, b, s : in  std_logic;
-	 x       : out std_logic);
+entity Mux is 
+	generic(N: natural := 3);
+   port( a, b   : in  std_logic_vector(N-1 downto 0);
+	   s	: in  std_logic;
+	   x    : out std_logic_vector(N-1 downto 0));
 end Mux;
 
 architecture behavior of Mux is
-begin 
-    with s select
-        x <= a when '0',
-	     b when '1';
+begin
+        x <= a when s='0' else
+	     b;
 end behavior;
