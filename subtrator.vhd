@@ -16,13 +16,13 @@ END behavior1;
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 
-ENTITY Grupo02 IS
+ENTITY Subtrator IS
    GENERIC(N     : integer := 4);    
-	PORT (a,b	:	IN  STD_LOGIC_VECTOR (0 TO N-1);
-			ans	:	OUT STD_LOGIC_VECTOR(0 TO N-1));
-END Grupo02;
+	PORT (a,b	:	IN  STD_LOGIC_VECTOR (N-1 DOWNTO 0);
+			ans	:	OUT STD_LOGIC_VECTOR(N-1 DOWNTO 0));
+END Subtrator;
 
-ARCHITECTURE behavior2 OF Grupo02 IS
+ARCHITECTURE behavior2 OF Subtrator IS
 
 COMPONENT FullSubtractor
     PORT(p, q, b 			: IN  STD_LOGIC;
@@ -30,7 +30,7 @@ COMPONENT FullSubtractor
          borrow  			: OUT STD_LOGIC);
 END COMPONENT;
 	
-SIGNAL aux	:	STD_LOGIC_VECTOR(1 TO N);
+SIGNAL aux	:	STD_LOGIC_VECTOR(N DOWNTO 1);
 BEGIN
 	ans(0) <= a(0) xor b(0);
 	aux(1) <= not a(0) and b(0);
@@ -39,6 +39,3 @@ BEGIN
 			SUBX: FullSubtractor PORT MAP(a(i),b(i),aux(i),ans(i),aux(i+1));
 		END GENERATE SUB;
 END behavior2;
-
-
-
