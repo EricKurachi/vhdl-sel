@@ -20,14 +20,14 @@ use IEEE.STD_LOGIC_1164.ALL;
 use ieee.numeric_std.all;
 
 
-entity gen_mult is
-generic (N: integer := 4;M: integer := 4);
+entity Multiplicador is
+generic (N: integer := 8;M: integer :=8);
 port ( a    :  in  std_logic_vector(N-1 downto 0);
        b    :  in  std_logic_vector(M-1 downto 0);
        prod :  out std_logic_vector(M-1 downto 0) );
-end entity gen_mult;
+end entity Multiplicador;
 
-architecture behavior of gen_mult is
+architecture behavior of Multiplicador is
 
 -- Componente do somador completo
 component adder is
