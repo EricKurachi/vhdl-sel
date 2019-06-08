@@ -17,7 +17,7 @@ LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 
 ENTITY Subtrator IS
-   GENERIC(N     : integer := 4);    
+   GENERIC(N     : integer := 8);    
 	PORT (a,b	:	IN  STD_LOGIC_VECTOR (N-1 DOWNTO 0);
 			ans	:	OUT STD_LOGIC_VECTOR(N-1 DOWNTO 0));
 END Subtrator;
