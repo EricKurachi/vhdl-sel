@@ -1,50 +1,61 @@
 LIBRARY IEEE;
-USE IEEE.std_logic_1164.ALL;
-USE IEEE.NUMERIC_STD.ALL;
+USE IEEE.STD_LOGIC_1164.ALL;
 
-entity Gerador is
-	generic(
-		bussize	: integer := 16);
+entity logisticmap is
+	generic(bussize : integer := 8);
 	port(
-		clk, clr : in  std_logic;
-		start	 : in  std_logic;
-		x0		 : in  std_logic_vector(bussize-1 downto 0);
-		xnout	 : buffer std_logic_vector(bussize-1 downto 0));	--na vdd, é um out std_logic_vector
-end Gerador;
+		clk, clr	: in	std_logic;
+		start		: in	std_logic;
+		x0			: in	std_logic_vector(bussize-1 downto 0);
+		xnout		: out	std_logic_vector(bussize-1 downto 0));
+end logisticmap;			
 
-architecture behavior of Gerador is
+architecture comportamento of logisticmap is
+----------------------------------------------------
+--Chamando os componentes
+component ffd is
+	port( a				:	in 	 std_logic_vector(bussize-1 downto 0);
+			clk,clr		:	in 	 std_logic;
+			saida			:	buffer std_logic_vector(bussize-1 downto 0));
+end component ffd;
 
-component Mux is
-    port(a, b, s : in  std_logic;
-	 x       : out std_logic);
+component Subtrator is
+	port (a,b	:	in  std_logic_vector(bussize-1 downto 0);
+			ans	:	out std_logic_vector(bussize-1 downto 0));
+end component Subtrator;
+
+component Mux is 
+   port( a, b  : in  std_logic_vector(bussize-1 downto 0);
+			s		: in  std_logic;
+		   x     : out std_logic_vector(bussize-1 downto 0));
+end component Mux;
+
+component Multiplicador is
+port ( a    :  in  std_logic_vector(bussize-1 downto 0);
+       b    :  in  std_logic_vector(bussize-1 downto 0);
+       prod :  out std_logic_vector(bussize-1 downto 0) );
+end component Multiplicador;
+
+component Deslocador is 
+ port( entrada	: in  std_logic_vector(bussize-1 downto 0);
+		 saida	: out std_logic_vector(bussize-1 downto 0));
 end component;
 
---FliFlop tipo D
-procedure ffd (
-	signal d	:	in  std_logic;
-	signal clkffd	:	in  std_logic;
-	signal rst : in std_logic;
-	signal q	:	out std_logic) is
-	begin
-		if rst='1' then
-			q <= '0';
-		elsif clkffd'event AND clkffd = '1' then
-			q <= d;
-		end if;
-end ffd;
-
-signal aux : std_logic_vector(bussize-1 downto 0);
---signal xfuture : std_logic_vector(bussize-1 downto 0);
+-----------------------------------------------------
+-- Declarando sinais auxiliares
+signal pmux	   : std_logic_vector(bussize-1 downto 0); --sinal resultado do mux
+signal pmulti  : std_logic_vector(bussize-1 downto 0); --sinal resultado do multiplicador
+signal psub	   : std_logic_vector(bussize-1 downto 0); --sinal resultado do subtrator
+signal pffd		: std_logic_vector(bussize-1 downto 0); --sinal resultado do fli flop tipo D
+signal xfuture : std_logic_vector(bussize-1 downto 0); --sinal X(n+1)
 
 begin
-MUX_loop:
-	for i in bussize-1 downto 0 generate
-		MX: Mux port map(x0(i),xnout(i),start,aux(i));				----mudar no futuro para xfuture
-	end generate MUX_loop;
+E1 : Mux port map(x0,xfuture,start,pmux);
+E2 : ffd port map(pmux,clk,clr,pffd);
+E3 : Multiplicador port map(pffd,pffd,pmulti);
+E4 : Subtrator port map(pffd,pmulti,psub);
+E5 : Deslocador port map(psub,xfuture);
+xnout <= pffd;
 
 
-FFDs_loop:
-	for i in bussize-1 downto 0 generate
-		ffd(aux(i),clk,clr,xnout(i));
-	end generate FFDs_loop;	
-end behavior;	
+end comportamento;
